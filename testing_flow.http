@@ -1,0 +1,98 @@
+### 1. Create User (Shipping Line)
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "username": "shipping_admin_1",
+  "email": "admin@shipping.com",
+  "password": "strongPassword123",
+  "role": "SHIPPING_LINE"
+}
+
+### 2. Login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "shipping_admin_1",
+  "password": "strongPassword123"
+}
+
+> {% client.global.set("auth_token", response.body.token); %}
+
+### 3. Register Vessel
+POST http://localhost:8080/api/vessels
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "name": "Ever Given",
+  "imoNumber": "IMO9811000",
+  "capacity": 20000
+}
+
+### 4. Create Vessel Schedule
+POST http://localhost:8080/api/vessels/schedules
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "vessel": { "id": 1 },
+  "arrivalTime": "2024-05-01T10:00:00",
+  "departureTime": "2024-05-05T10:00:00",
+  "status": "SCHEDULED"
+}
+
+### 5. Register Container (ARRIVED automatically)
+POST http://localhost:8080/api/containers
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "containerNumber": "MSKU1234567",
+  "size": "40ft",
+  "weight": 15000,
+  "vesselSchedule": { "id": 1 }
+}
+
+### 6. Create Booking
+POST http://localhost:8080/api/bookings
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "bookedBy": { "id": 1 },
+  "container": { "id": 1 },
+  "destination": "Warehouse A"
+}
+
+### 7. File Customs Declaration
+POST http://localhost:8080/api/customs/declaration
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "container": { "id": 1 },
+  "hsCode": "847130",
+  "declaredValue": 50000.0
+}
+
+### 8. Clear Container
+PUT http://localhost:8080/api/customs/declaration/1/clear?remarks=All%20Clear
+Authorization: Bearer {{auth_token}}
+
+### 9. Perform GATE_OUT target container
+PUT http://localhost:8080/api/containers/1/status?status=GATE_OUT
+Authorization: Bearer {{auth_token}}
+
+### 10. Update transit -> delivered
+PUT http://localhost:8080/api/containers/1/status?status=DELIVERED
+Authorization: Bearer {{auth_token}}
+
+### 11. Calculate Fees
+POST http://localhost:8080/api/fees/calculate?containerId=1
+Authorization: Bearer {{auth_token}}
+
+### 12. Fetch Movement Logs
+GET http://localhost:8080/api/movement-logs/container/1
+Authorization: Bearer {{auth_token}}
