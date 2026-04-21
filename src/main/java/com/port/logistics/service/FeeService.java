@@ -1,13 +1,15 @@
 package com.port.logistics.service;
 
-import com.port.logistics.entity.Container;
-import com.port.logistics.entity.PortStorageFee;
-import com.port.logistics.repository.PortStorageFeeRepository;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import com.port.logistics.entity.Container;
+import com.port.logistics.entity.PortStorageFee;
+import com.port.logistics.repository.PortStorageFeeRepository;
 
 @Service
 public class FeeService {
@@ -55,5 +57,12 @@ public class FeeService {
     public PortStorageFee getInvoice(Long containerId) {
         return feeRepository.findByContainerId(containerId)
                 .orElseThrow(() -> new RuntimeException("Invoice not found. Calculate fees first."));
+    }
+
+    /**
+     * ADMIN: Get all calculated fees
+     */
+    public List<PortStorageFee> getAllFees() {
+        return feeRepository.findAll();
     }
 }

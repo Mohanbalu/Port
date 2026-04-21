@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api/axiosConfig';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -14,9 +14,9 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await api.post('/auth/login', { username, password });
-      login(res.data.token);
+      login(res.data);
       navigate('/');
-    } catch (err) {
+    } catch {
       setError('Invalid credentials or access denied.');
     }
   };

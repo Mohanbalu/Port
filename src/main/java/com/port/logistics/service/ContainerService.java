@@ -1,5 +1,12 @@
 package com.port.logistics.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.port.logistics.entity.Container;
 import com.port.logistics.entity.CustomsDeclaration;
 import com.port.logistics.entity.User;
@@ -8,12 +15,6 @@ import com.port.logistics.entity.enums.CustomsStatus;
 import com.port.logistics.entity.enums.MovementType;
 import com.port.logistics.repository.ContainerRepository;
 import com.port.logistics.repository.CustomsDeclarationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ContainerService {
@@ -83,6 +84,9 @@ public class ContainerService {
     }
     
     public Container getContainer(Long id) {
+        if (id == null) {
+            throw new RuntimeException("Container ID cannot be null");
+        }
         return containerRepository.findContainerWithFullHistory(id)
                 .orElseThrow(() -> new RuntimeException("Container not found"));
     }

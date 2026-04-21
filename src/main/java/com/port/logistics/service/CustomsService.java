@@ -1,13 +1,16 @@
 package com.port.logistics.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.port.logistics.entity.Container;
 import com.port.logistics.entity.CustomsDeclaration;
 import com.port.logistics.entity.User;
 import com.port.logistics.entity.enums.ContainerStatus;
 import com.port.logistics.entity.enums.CustomsStatus;
 import com.port.logistics.repository.CustomsDeclarationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class CustomsService {
@@ -28,6 +31,9 @@ public class CustomsService {
     }
 
     public CustomsDeclaration updateDeclarationStatus(Long declarationId, CustomsStatus newStatus, User officer, String remarks) {
+        if (declarationId == null) {
+            throw new RuntimeException("Declaration ID cannot be null");
+        }
         CustomsDeclaration declaration = customsRepository.findById(declarationId)
                 .orElseThrow(() -> new RuntimeException("Declaration not found"));
         
@@ -47,5 +53,19 @@ public class CustomsService {
         }
         
         return saved;
+    }
+
+    /**
+     * ADMIN: Get all customs declarations
+     */
+    public List<CustomsDeclaration> getAllDeclarations() {
+        return customsRepository.findAll();
+    }
+
+    /**
+     * ADMIN: Filter customs declarations by status
+     */
+    public List<CustomsDeclaration> getDeclarationsByStatus(CustomsStatus status) {
+        return customsRepository.findByStatus(status);
     }
 }

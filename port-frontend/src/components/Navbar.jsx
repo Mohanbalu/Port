@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const Navbar = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout, isAdmin, role } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -21,9 +21,20 @@ const Navbar = () => {
       <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
         <Link to="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: '500' }}>Dashboard</Link>
         <Link to="/containers" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: '500' }}>Containers</Link>
+        <Link to="/vessels" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: '500' }}>Vessels</Link>
+        <Link to="/bookings" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: '500' }}>Bookings</Link>
         <Link to="/customs" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: '500' }}>Customs</Link>
         <Link to="/tracking" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: '500' }}>Tracking</Link>
-        <div style={{ color: 'var(--primary-color)', fontWeight: '600', marginLeft: '16px' }}>{user.username}</div>
+        {isAdmin && (
+          <>
+            <Link to="/admin" style={{ color: 'var(--primary-color)', textDecoration: 'none', fontWeight: '600' }}>Admin Panel</Link>
+            <Link to="/admin/users" style={{ color: 'var(--primary-color)', textDecoration: 'none', fontWeight: '600' }}>Users</Link>
+            <Link to="/admin/reports" style={{ color: 'var(--primary-color)', textDecoration: 'none', fontWeight: '600' }}>Reports</Link>
+          </>
+        )}
+        <div style={{ color: 'var(--primary-color)', fontWeight: '600', marginLeft: '16px' }}>
+          {user.username} ({role || 'UNKNOWN'})
+        </div>
         <button onClick={handleLogout} className="btn btn-secondary">Logout</button>
       </div>
     </nav>

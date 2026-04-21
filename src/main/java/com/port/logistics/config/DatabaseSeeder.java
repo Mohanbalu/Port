@@ -1,14 +1,14 @@
 package com.port.logistics.config;
 
-import com.port.logistics.entity.User;
-import com.port.logistics.entity.enums.UserRole;
-import com.port.logistics.repository.UserRepository;
+import java.time.LocalDateTime;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
+import com.port.logistics.entity.User;
+import com.port.logistics.entity.enums.Role;
+import com.port.logistics.repository.UserRepository;
 
 @Component
 public class DatabaseSeeder implements CommandLineRunner {
@@ -30,24 +30,24 @@ public class DatabaseSeeder implements CommandLineRunner {
             admin.setUsername("admin");
             admin.setEmail("admin@port.com");
             admin.setPassword(passwordEncoder.encode("admin123"));
-            admin.setRole(UserRole.ADMIN);
+            admin.setRole(Role.ADMIN);
             admin.setCreatedAt(LocalDateTime.now());
 
             User shipping = new User();
             shipping.setUsername("shipping");
             shipping.setEmail("shipping@port.com");
             shipping.setPassword(passwordEncoder.encode("shipping123"));
-            shipping.setRole(UserRole.SHIPPING_LINE);
+            shipping.setRole(Role.SHIPPING_LINE);
             shipping.setCreatedAt(LocalDateTime.now());
 
             User customs = new User();
             customs.setUsername("customs");
             customs.setEmail("customs@port.com");
             customs.setPassword(passwordEncoder.encode("customs123"));
-            customs.setRole(UserRole.CUSTOMS_OFFICER);
+            customs.setRole(Role.CUSTOMS_OFFICER);
             customs.setCreatedAt(LocalDateTime.now());
 
-            userRepository.saveAll(Arrays.asList(admin, shipping, customs));
+            userRepository.saveAll(java.util.Arrays.asList(admin, shipping, customs));
 
             System.out.println("✅ USERS SEEDED SUCCESSFULLY!");
             System.out.println("Login Credentials Created:");

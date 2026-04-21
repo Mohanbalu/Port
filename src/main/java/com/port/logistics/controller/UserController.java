@@ -1,13 +1,19 @@
 package com.port.logistics.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.port.logistics.entity.User;
 import com.port.logistics.entity.enums.Role;
 import com.port.logistics.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -16,8 +22,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Open endpoint to register initially. In production, this would be admin-only or a separate signup flow.
+    // ADMIN-only endpoint to create users in the system
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public User createUser(@RequestBody User user) {
         return userService.createUser(user);
     }

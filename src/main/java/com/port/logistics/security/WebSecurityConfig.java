@@ -1,8 +1,7 @@
 package com.port.logistics.security;
 
-import com.port.logistics.security.jwt.AuthEntryPointJwt;
-import com.port.logistics.security.jwt.AuthTokenFilter;
-import com.port.logistics.security.services.UserDetailsServiceImpl;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +19,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
+import com.port.logistics.security.jwt.AuthEntryPointJwt;
+import com.port.logistics.security.jwt.AuthTokenFilter;
+import com.port.logistics.security.services.UserDetailsServiceImpl;
 
 @Configuration
 @EnableMethodSecurity

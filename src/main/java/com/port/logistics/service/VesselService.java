@@ -1,14 +1,15 @@
 package com.port.logistics.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.port.logistics.entity.Vessel;
 import com.port.logistics.entity.VesselSchedule;
 import com.port.logistics.entity.enums.VesselStatus;
 import com.port.logistics.repository.VesselRepository;
 import com.port.logistics.repository.VesselScheduleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class VesselService {
@@ -20,6 +21,9 @@ public class VesselService {
     private VesselScheduleRepository vesselScheduleRepository;
 
     public Vessel registerVessel(Vessel vessel) {
+        if (vessel == null) {
+            throw new RuntimeException("Vessel cannot be null");
+        }
         return vesselRepository.save(vessel);
     }
 
@@ -31,6 +35,9 @@ public class VesselService {
     }
 
     public VesselSchedule updateStatus(Long scheduleId, VesselStatus newStatus) {
+        if (scheduleId == null) {
+            throw new RuntimeException("Schedule ID cannot be null");
+        }
         VesselSchedule schedule = vesselScheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new RuntimeException("Vessel Schedule not found"));
         schedule.setStatus(newStatus);

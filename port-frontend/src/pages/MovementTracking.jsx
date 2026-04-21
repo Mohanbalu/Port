@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import api from '../api/axiosConfig';
 
 const MovementTracking = () => {
   const [containerId, setContainerId] = useState('');
   const [logs, setLogs] = useState([]);
+  const [error, setError] = useState('');
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -11,9 +12,11 @@ const MovementTracking = () => {
     try {
       const res = await api.get(`/movement-logs/container/${containerId}`);
       setLogs(res.data);
+      setError('');
     } catch (err) {
       console.error(err);
       setLogs([]);
+      setError(err.response?.data?.error || 'No movement logs found for this container.');
     }
   };
 
@@ -34,6 +37,7 @@ const MovementTracking = () => {
           </div>
           <button type="submit" className="btn">Track Lifecycle</button>
         </form>
+        {error && <p style={{ color: 'var(--danger)', marginTop: '12px' }}>{error}</p>}
       </div>
 
       {logs.length > 0 && (
@@ -48,11 +52,13 @@ const MovementTracking = () => {
                   background: 'var(--primary-color)', boxShadow: '0 0 10px var(--primary-color)' 
                 }} />
                 <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '4px' }}>
-                  {new Date(log.timestamp).toLocaleString()}
+                  {log.movementTime ? new Date(log.movementTime).toLocaleString() : '-'}
                 </div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{log.status}</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{log.movementType}</div>
                 <div style={{ color: 'var(--success)' }}>Location: {log.location}</div>
-                <div style={{ color: 'var(--text-active)' }}>{log.remarks}</div>
+                <div style={{ color: 'var(--text-active)' }}>
+                  Performed By: {log.performedBy?.username || '-'}
+                </div>
               </div>
             ))}
           </div>
